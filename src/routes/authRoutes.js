@@ -49,7 +49,13 @@ router.post('/login', async (req, res) => {
 
         res.json({
             message: 'Login realizado!',
-            user: { id: user.id, nome: user.nomeCompleto, patente: user.patente, status: user.status, tipoServico: user.tipoServico }
+            user: { 
+                id: user.id, 
+                nome: user.nomeCompleto, 
+                patente: user.patente, 
+                status: user.status, 
+                tipoServico: user.tipoServico, 
+                perfil: user.perfil}
         });
 
     } catch (error) {
