@@ -10,6 +10,7 @@ const faturaRoutes = require('./routes/faturaRoutes');
 const visitanteRoutes = require('./routes/visitanteRoutes'); 
 const ranchoRoutes = require('./routes/ranchoRoutes');
 const notificacaoRoutes = require('./routes/notificacaoRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -36,6 +37,7 @@ app.use('/api/faturas', faturaRoutes);
 app.use('/api/visitantes', visitanteRoutes);
 app.use('/api/rancho', ranchoRoutes);
 app.use('/api/notificacoes', notificacaoRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
     console.log(`🔥Servidor rodando na porta ${PORT}`);
