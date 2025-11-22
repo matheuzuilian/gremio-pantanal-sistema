@@ -38,3 +38,26 @@ exports.removerMembro = async (req, res) => {
         res.status(500).json({ error: 'Erro ao remover membro.' });
     }
 };
+
+// Adicionar Projeto
+exports.adicionarProjeto = async (req, res) => {
+    const { titulo, descricao, status, imagem_url } = req.body;
+    try {
+        const sql = "INSERT INTO projetos (titulo, descricao, status, imagem_url) VALUES (?, ?, ?, ?)";
+        await db.promise().query(sql, [titulo, descricao, status, imagem_url]);
+        res.status(201).json({ message: 'Projeto adicionado!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao adicionar projeto.' });
+    }
+};
+
+// Remover Projeto
+exports.removerProjeto = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.promise().query("DELETE FROM projetos WHERE id = ?", [id]);
+        res.json({ message: 'Projeto removido.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao remover.' });
+    }
+};
