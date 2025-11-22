@@ -12,6 +12,7 @@ const ranchoRoutes = require('./routes/ranchoRoutes');
 const notificacaoRoutes = require('./routes/notificacaoRoutes');
 const authRoutes = require('./routes/authRoutes');
 const publicRoutes = require('./routes/publicRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -40,6 +41,7 @@ app.use('/api/rancho', ranchoRoutes);
 app.use('/api/notificacoes', notificacaoRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.listen(PORT, () => {
     console.log(`🔥Servidor rodando na porta ${PORT}`);
