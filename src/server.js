@@ -43,6 +43,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Rota de Teste de Atualização
+app.get('/api/teste-admin', (req, res) => {
+    res.send('Estou atualizado e as rotas Admin deveriam funcionar!');
+});
+
 app.listen(PORT, () => {
     console.log(`🔥Servidor rodando na porta ${PORT}`);
     console.log(`Rotas disponíveis em: http://localhost:${PORT}/api/associados`);
