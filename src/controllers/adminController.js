@@ -93,3 +93,35 @@ exports.cadastrarAdmin = async (req, res) => {
         res.status(500).json({ message: 'Erro ao cadastrar administrador.' });
     }
 };
+
+// Cadastrar NOVO MEMBRO (Militar Comum) via Painel Admin
+exports.cadastrarMembro = async (req, res) => {
+    const { nomeCompleto, cpf, email, senha, patente, tipoServico } = req.body;
+
+    // Validação básica
+    if (!nomeCompleto || !cpf || !senha) {
+        return res.status(400).json({ message: 'Nome, CPF e Senha são obrigatórios.' });
+    }
+
+    try {
+        // 1. Criptografar a senha
+        const salt = await bcrypt.genSalt(10);
+        const senhaHash = await bcrypt.hash(senha, salt);
+
+        // 2. Inserir no banco (Perfil padrão = 'militar')
+        const sql = `INSERT INTO associados 
+                     (nomeCompleto, cpf, email, senha_hash, patente, tipoServico, perfil, status) 
+                     VALUES (?, ?, ?, ?, ?, ?, 'militar', 'Ativo')`;
+        
+        await db.promise().query(sql, [nomeCompleto, cpf, email, senhaHash, patente, tipoServico]);
+        
+        res.status(201).json({ message: 'Membro cadastrado com sucesso!' });
+
+    } catch (error) {
+        console.error(error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: 'Erro: CPF ou E-mail já existe.' });
+        }
+        res.status(500).json({ message: 'Erro ao cadastrar membro.' });
+    }
+};
