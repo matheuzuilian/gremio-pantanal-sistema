@@ -11,5 +11,6 @@ router.post('/diretoria', sobreController.adicionarDiretor);
 router.delete('/diretoria/:id', sobreController.removerDiretor);
 router.post('/projetos', adminController.adicionarProjeto);
 router.delete('/projetos/:id', adminController.removerProjeto);
+router.post('/novo-admin', adminController.cadastrarAdmin);
 
 module.exports = router;

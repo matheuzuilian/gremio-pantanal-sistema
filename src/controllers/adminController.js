@@ -1,4 +1,5 @@
 const db = require('../db');
+const bcrypt = require('bcryptjs');
 
 exports.criarNoticia = async (req, res) => {
     const { titulo, conteudo, status } = req.body;
@@ -59,5 +60,36 @@ exports.removerProjeto = async (req, res) => {
         res.json({ message: 'Projeto removido.' });
     } catch (error) {
         res.status(500).json({ error: 'Erro ao remover.' });
+    }
+};
+
+// Cadastrar NOVO ADMINISTRADOR
+exports.cadastrarAdmin = async (req, res) => {
+    const { nomeCompleto, cpf, email, senha, patente } = req.body;
+
+    if (!nomeCompleto || !cpf || !senha) {
+        return res.status(400).json({ message: 'Dados incompletos.' });
+    }
+
+    try {
+        // 1. Criptografar senha
+        const salt = await bcrypt.genSalt(10);
+        const senhaHash = await bcrypt.hash(senha, salt);
+
+        // 2. Inserir forçando perfil = 'admin' e tipoServico = 'Administrativo'
+        const sql = `INSERT INTO associados 
+                     (nomeCompleto, cpf, email, senha_hash, patente, perfil, tipoServico) 
+                     VALUES (?, ?, ?, ?, ?, 'admin', 'Administrativo')`;
+        
+        await db.promise().query(sql, [nomeCompleto, cpf, email, senhaHash, patente]);
+        
+        res.status(201).json({ message: 'Novo Administrador cadastrado com sucesso!' });
+
+    } catch (error) {
+        console.error(error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: 'Erro: CPF ou Email já cadastrados.' });
+        }
+        res.status(500).json({ message: 'Erro ao cadastrar administrador.' });
     }
 };
